@@ -1,4 +1,4 @@
-package aoc2024
+package aoc2024.day01
 
 
 def solvePart1(input: String): String = {
