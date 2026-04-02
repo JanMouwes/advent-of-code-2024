@@ -1,7 +1,5 @@
 package aoc2024.day03
 
-import aoc2024.day03.Instruction.Do
-
 import scala.util.matching.Regex
 
 type MulInstruction = (Int, Int)
