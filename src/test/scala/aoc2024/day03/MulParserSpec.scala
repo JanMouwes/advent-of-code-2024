@@ -93,7 +93,7 @@ class MulParserSpec extends AocSpecBase {
   }
   it should "yield the correct real response" in {
     val input = realInput
-    val expected = ""
+    val expected = "99532691"
 
     solvePart2(input) should be(expected)
   }
