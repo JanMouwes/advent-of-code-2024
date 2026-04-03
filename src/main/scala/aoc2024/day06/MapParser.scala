@@ -1,13 +1,22 @@
 package aoc2024.day06
 
-type Dimensions = (Int, Int)
 type Obstacles = Set[Coordinate]
 type GuardPosition = Coordinate
-type PatrolMap = (Dimensions, Obstacles, GuardPosition)
+type PatrolMap = (Dimensions, Obstacles)
+
+class Dimensions(val width: Int, val height: Int) {
+  def isInBounds(c: Coordinate): Boolean = {
+    c.x > 0 && c.y > 0 && c.x < this.width && c.y < this.height
+  }
+}
 
 class Coordinate(val x: Int, val y: Int) {
-  def :+(that: Coordinate): Coordinate = {
+  def +(that: Coordinate): Coordinate = {
     Coordinate(this.x + that.x, this.y + that.y)
+  }
+
+  def *(scalar: Int): Coordinate = {
+    Coordinate(this.x * scalar, this.y * scalar)
   }
 
   override def equals(obj: Any): Boolean = obj match {
@@ -20,9 +29,16 @@ class Coordinate(val x: Int, val y: Int) {
   override def toString: String = s"Coordinate(${this.x}, ${this.y})"
 }
 
-def parseMap(input: String): PatrolMap = {
+object Coordinate {
+  def fromTuple(tuple: (Int, Int)): Coordinate = {
+    Coordinate(tuple._1, tuple._2)
+  }
+}
+
+
+def parseMap(input: String): (GuardPosition, PatrolMap) = {
   val input2d = input.linesIterator.toSeq
-  val dimensions = (input2d.head.length, input2d.size)
+  val dimensions = Dimensions(input2d.head.length, input2d.size)
 
   val (obstacles, maybeGuardPosition) = scanMap(input2d).foldLeft[(Obstacles, Option[GuardPosition])]((Set[Coordinate](), None)) { (state, cell) =>
     val (item, currentPos) = cell
@@ -34,7 +50,7 @@ def parseMap(input: String): PatrolMap = {
   }
 
   maybeGuardPosition match {
-    case Some(guardPosition: GuardPosition) => (dimensions, obstacles, guardPosition)
+    case Some(guardPosition: GuardPosition) => (guardPosition, (dimensions, obstacles))
     case None => throw new IllegalArgumentException("Map did not contain a guard")
   }
 }

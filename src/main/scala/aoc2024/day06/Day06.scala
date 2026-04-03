@@ -1,55 +1,41 @@
 package aoc2024.day06
 
-import scala.annotation.tailrec
-
 def solvePart1(input: String): String = {
-  val path = runPatrol(parseMap(input))
+  val (start, patrolMap) = parseMap(input)
+  val path = runPatrol(start, patrolMap)
 
   path.size.toString
 }
 
 def solvePart2(input: String): String = {
-  ""
+  val (start, patrolMap) = parseMap(input)
+  val obstructions = findLoopingObstructions(start, patrolMap)
+  obstructions.size.toString
 }
 
-def runPatrol(patrolMap: PatrolMap): Set[Coordinate] = {
-  @tailrec
-  def doSteps(patrolMap: PatrolMap, direction: Direction, agg: Set[Coordinate]): Set[Coordinate] = {
-    val (dimensions, _, guardPos) = patrolMap
+def findLoopingObstructions(start: Coordinate, patrolMap: PatrolMap): Set[Coordinate] = {
+  val pathWithDirections = runPatrolWithDirections(start, patrolMap)
+  val obstacles = patrolMap._2
 
-    if (guardPos.x >= dimensions._1 || guardPos.y >= dimensions._2 || guardPos.x < 0 || guardPos.y < 0) {
-      return agg
+  pathWithDirections.foldLeft(Seq[(Coordinate, Direction)](), Set[Coordinate]()) {
+    (agg, currentHeading) => {
+      val (prevPath, obstacleLocations) = agg
+
+      val (coord, dir) = currentHeading
+      val potentialObstacleLocation = coord + dir.unitVector
+      val nextPath = patrolFrom(
+        coord,
+        dir.turnRight(),
+        (patrolMap._1, patrolMap._2)
+      )
+      val intersects = prevPath.intersect(nextPath).nonEmpty
+
+      (
+        prevPath :+ currentHeading,
+        if intersects
+        then obstacleLocations + potentialObstacleLocation
+        else obstacleLocations
+      )
     }
-
-    val (nextMap, nextDirection) = step(patrolMap, direction)
-
-    doSteps(nextMap, nextDirection, agg + guardPos)
-  }
-
-  doSteps(patrolMap, Direction.North, Set())
-}
-
-enum Direction(val unitVector: Coordinate):
-  case North extends Direction(Coordinate(0, -1))
-  case East extends Direction(Coordinate(1, 0))
-  case South extends Direction(Coordinate(0, 1))
-  case West extends Direction(Coordinate(-1, 0))
-
-  def turnRight(): Direction = {
-    this match {
-      case North => East
-      case East => South
-      case South => West
-      case West => North
-    }
-  }
-
-def step(map: PatrolMap, direction: Direction): (PatrolMap, Direction) = {
-  val (dimensions, obstacles, guardPosition) = map
-  val next = guardPosition :+ direction.unitVector
-  val isObstructed = map._2.contains(next)
-
-  if isObstructed
-  then (map, direction.turnRight())
-  else ((dimensions, obstacles, next), direction)
+  }._2.removedAll(obstacles)
 }
