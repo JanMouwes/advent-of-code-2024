@@ -15,40 +15,48 @@ enum Direction(val unitVector: Coordinate):
     case West => North
   }
 
-def runPatrol(start: Coordinate, patrolMap: PatrolMap): Seq[Coordinate] = runPatrolWithDirections(start, patrolMap).map(_._1).distinct
+def runPatrol(start: Coordinate, patrolMap: PatrolMap): PatrolPath = runPatrolWithDirections(start, patrolMap)
 
-def runPatrolWithDirections(start: Coordinate, patrolMap: PatrolMap): Seq[(Coordinate, Direction)] = patrolFrom(start, Direction.North, patrolMap).distinct
+def runPatrolWithDirections(start: Coordinate, patrolMap: PatrolMap): PatrolPath = patrolFrom(start, Direction.North, patrolMap)
 
-def patrolFrom(from: Coordinate, direction: Direction, patrolMap: PatrolMap): Seq[(Coordinate, Direction)] = {
-  return patrolFromTailRec(from, direction, patrolMap)
-
-  val (dimensions, _) = patrolMap
-
-  if (!dimensions.isInBounds(from)) {
-    return Seq()
-  }
-
-  val (nextCoord, nextDirection) = step(from, direction, patrolMap)
-
-  (from, direction) +: patrolFrom(nextCoord, nextDirection, patrolMap)
+def patrolFrom(from: Coordinate, direction: Direction, patrolMap: PatrolMap): PatrolPath = {
+  patrolFromTailRec(from, direction, patrolMap)
 }
 
 
-def patrolFromTailRec(start: Coordinate, startDirection: Direction, patrolMap: PatrolMap): Seq[(Coordinate, Direction)] = {
+
+private def patrolFromTailRec(start: Coordinate, startDirection: Direction, patrolMap: PatrolMap): PatrolPath = {
   val (dimensions, _) = patrolMap
 
   @tailrec
-  def f(from: Coordinate, direction: Direction, agg: Seq[(Coordinate, Direction)]): Seq[(Coordinate, Direction)] = {
+  def f(from: Coordinate, direction: Direction, agg: PatrolPath): PatrolPath = {
     if (!dimensions.isInBounds(from)) {
       return agg
     }
 
     val (nextCoord, nextDirection) = step(from, direction, patrolMap)
 
-    f(nextCoord, nextDirection, agg :+ (from, direction))
+    f(nextCoord, nextDirection, agg.extend(from, direction))
   }
 
-  f(start, startDirection, Seq())
+  f(start, startDirection, StepPatrolPath.empty)
+}
+
+private def patrolToPath(start: Coordinate, startDirection: Direction, patrolMap: PatrolMap): PatrolPath = {
+  val (dimensions, _) = patrolMap
+
+  @tailrec
+  def f(from: Coordinate, direction: Direction, agg: SegmentedPatrolPath): SegmentedPatrolPath = {
+    if (!dimensions.isInBounds(from)) {
+      return agg
+    }
+
+    val (nextCoord, nextDirection) = step(from, direction, patrolMap)
+
+    f(nextCoord, nextDirection, agg.extend((from, direction)))
+  }
+
+  f(start, startDirection, SegmentedPatrolPath.empty)
 }
 
 
