@@ -3,7 +3,7 @@ package aoc2024.day07
 import aoc2024.base.AocSpecBase
 
 class CalibrationEquationParserSpec extends AocSpecBase {
-  behavior of "solvePart2"
+  behavior of "parseEquations"
 
   it should "contain all equations" in {
     val input = "190: 10 19\n3267: 81 40 27"

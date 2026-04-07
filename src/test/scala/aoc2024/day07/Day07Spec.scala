@@ -14,7 +14,7 @@ class Day07Spec extends AocSpecBase {
     solvePart1(testInput) should equal(expected)
   }
   it should "solve the real input correctly" in {
-    val expected = ""
+    val expected = "12553187650171"
 
     solvePart1(realInput) should equal(expected)
   }
@@ -22,13 +22,13 @@ class Day07Spec extends AocSpecBase {
   behavior of "solvePart2"
 
   it should "solve the test correctly" in {
-    val expected = ""
+    val expected = "11387"
 
     solvePart2(testInput) should equal(expected)
   }
 
   it should "solve the real input correctly" in {
-    val expected = ""
+    val expected = "96779702119491"
 
     val actual = solvePart2(realInput)
 
