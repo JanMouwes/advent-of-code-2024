@@ -17,7 +17,7 @@ def findLoopingObstructions(start: Coordinate, patrolMap: PatrolMap): Set[Coordi
   pathWithDirections.zipWithIndex.foldLeft(SegmentedPatrolPath.empty, Set[Coordinate]()) {
     (agg, fold) => {
       if (reportProgress) {
-        val (_, i) = fold;
+        val (_, i) = fold
 
         println(s"${i + 1} / ${pathWithDirections.size}")
       }

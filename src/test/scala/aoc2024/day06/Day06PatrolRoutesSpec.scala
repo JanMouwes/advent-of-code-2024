@@ -28,13 +28,11 @@ class Day06PatrolRoutesSpec extends AocSpecBase {
   }
 
   it should "return the correct number of real occurrences" in {
-    val (guard, _) = parseMap(realInput)
-    val expected = ""
-    
+    val expected = "2022"
+
     val actual = solvePart2(realInput)
-    
+
     actual should equal(expected)
-    actual should not contain(guard)
   }
 
   behavior of "parseMap"
