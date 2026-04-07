@@ -1,6 +1,6 @@
 package aoc2024.day07
 
-type ParseResult = Seq[(Int, Seq[Int])]
+type ParseResult = Seq[(Long, Seq[Long])]
 
 def parseEquations(input: String): Option[ParseResult] = {
   input.linesIterator.map(parseEquation).foldLeft(Option(Seq.empty)) {
@@ -12,8 +12,11 @@ def parseEquations(input: String): Option[ParseResult] = {
   }
 }
 
-private def parseEquation(line: String): Option[(Int, Seq[Int])] = {
+private def parseEquation(line: String): Option[(Long, Seq[Long])] = {
   line.split(':') match
-    case Array(result, equationComponents) => Some(result.toInt, equationComponents.split(' ').filter(_.nonEmpty).map(_.toInt))
+    case Array(result, equationComponents) => Some((
+      result.toLong,
+      equationComponents.split(' ').filter(_.nonEmpty).map(_.toLong)
+    ))
     case _ => None
 }
