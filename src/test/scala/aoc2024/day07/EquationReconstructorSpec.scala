@@ -1,14 +1,13 @@
 package aoc2024.day07
 
 import aoc2024.base.AocSpecBase
-import aoc2024.day07.Operator.Plus
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.{forAll, whenever}
 
 class EquationReconstructorSpec extends AocSpecBase {
   behavior of "reconstructEquation"
-  
-  val ops = Seq(Operator.Plus, Operator.Mul)
+
+  private val ops = Seq(Operator.Plus, Operator.Mul)
 
   it should "handle a one-number case" in {
     val input: PartialEquation = (10, Seq(10))
