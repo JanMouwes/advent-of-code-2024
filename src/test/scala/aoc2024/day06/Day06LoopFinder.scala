@@ -1,0 +1,43 @@
+package aoc2024.day06
+
+import aoc2024.base.AocSpecBase
+import org.scalatest.prop.TableDrivenPropertyChecks.forEvery
+import org.scalatest.prop.Tables.Table
+
+class Day06LoopFinder extends AocSpecBase {
+  behavior of "findLoopingObstructions"
+
+  it should "find the correct obstructions" in {
+    val inputs = Table(
+      ("map", "obstructions"),
+      (""".#...
+         |.^#..
+         |.....
+         |.....
+         |.#...""".stripMargin, Set(Coordinate(0, 3))),
+      (""".....
+         |.^#..
+         |.....
+         |#....
+         |.#...""".stripMargin, Set(Coordinate(1, 0))),
+      (""".#...
+         |.^...
+         |.....
+         |#....
+         |.#...""".stripMargin, Set(Coordinate(2, 1))),
+      (""".#...
+         |....#
+         |.....
+         |#....
+         |.^...""".stripMargin, Set(Coordinate(3, 4))),
+    )
+    forEvery(inputs) {
+      (loopingMap, expected) =>
+        val (guard, patrolMap) = parseMap(loopingMap)
+
+        val actual = findLoopingObstructions(guard, patrolMap)
+
+        actual should equal(expected)
+    }
+  }
+}

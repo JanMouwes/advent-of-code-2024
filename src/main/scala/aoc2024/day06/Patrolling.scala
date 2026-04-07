@@ -24,41 +24,31 @@ def patrolFrom(from: Coordinate, direction: Direction, patrolMap: PatrolMap): Pa
 }
 
 
-
 private def patrolFromTailRec(start: Coordinate, startDirection: Direction, patrolMap: PatrolMap): PatrolPath = {
   val (dimensions, _) = patrolMap
 
   @tailrec
   def f(from: Coordinate, direction: Direction, agg: PatrolPath): PatrolPath = {
-    if (!dimensions.isInBounds(from)) {
+    val (nextCoord, nextDirection) = step(from, direction, patrolMap)
+
+    if (!dimensions.isInBounds(nextCoord)) {
+      // close off the final segment
+      return agg.extend(from, direction)
+    }
+    if (agg.loops) {
       return agg
     }
 
-    val (nextCoord, nextDirection) = step(from, direction, patrolMap)
+    val newAgg =
+      if nextDirection == direction
+      then agg
+      else agg.extend(nextCoord, direction).extend(nextCoord, nextDirection)
 
-    f(nextCoord, nextDirection, agg.extend(from, direction))
+    f(nextCoord, nextDirection, newAgg)
   }
 
-  f(start, startDirection, StepPatrolPath.empty)
+  f(start, startDirection, SegmentedPatrolPath.empty.extend(start, startDirection))
 }
-
-private def patrolToPath(start: Coordinate, startDirection: Direction, patrolMap: PatrolMap): PatrolPath = {
-  val (dimensions, _) = patrolMap
-
-  @tailrec
-  def f(from: Coordinate, direction: Direction, agg: SegmentedPatrolPath): SegmentedPatrolPath = {
-    if (!dimensions.isInBounds(from)) {
-      return agg
-    }
-
-    val (nextCoord, nextDirection) = step(from, direction, patrolMap)
-
-    f(nextCoord, nextDirection, agg.extend((from, direction)))
-  }
-
-  f(start, startDirection, SegmentedPatrolPath.empty)
-}
-
 
 def step(coordinate: Coordinate, direction: Direction, map: PatrolMap): (Coordinate, Direction) = {
   val (dimensions, obstacles) = map

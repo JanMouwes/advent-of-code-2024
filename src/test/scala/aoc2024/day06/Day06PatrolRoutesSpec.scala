@@ -11,12 +11,12 @@ class Day06PatrolRoutesSpec extends AocSpecBase {
   it should "return the correct number of test occurrences" in {
     val expected = "41"
 
-    solvePart1(testInput) should be(expected)
+    solvePart1(testInput) should equal(expected)
   }
   it should "return the correct number of real occurrences" in {
     val expected = "5409"
 
-    solvePart1(realInput) should be(expected)
+    solvePart1(realInput) should equal(expected)
   }
 
   behavior of "solvePart2"
@@ -24,12 +24,17 @@ class Day06PatrolRoutesSpec extends AocSpecBase {
   it should "return the correct number of test occurrences" in {
     val expected = "6"
 
-    solvePart2(testInput) should be(expected)
+    solvePart2(testInput) should equal(expected)
   }
-  it should "return the correct number of real occurrences" in {
-    val expected = ""
 
-//    solvePart2(realInput) should be(expected)
+  it should "return the correct number of real occurrences" in {
+    val (guard, _) = parseMap(realInput)
+    val expected = ""
+    
+    val actual = solvePart2(realInput)
+    
+    actual should equal(expected)
+    actual should not contain(guard)
   }
 
   behavior of "parseMap"
@@ -38,29 +43,38 @@ class Day06PatrolRoutesSpec extends AocSpecBase {
     val (_, (dimensions, _)) = parseMap(testInput)
     val expected = Dimensions(10, 10)
 
-    (dimensions.width, dimensions.height) should be((expected.width, expected.height))
+    (dimensions.width, dimensions.height) should equal((expected.width, expected.height))
   }
   it should "return the correct obstacles" in {
     val (_, (_, obstacles)) = parseMap(testInput)
     val expected = Set((9, 1), (1, 6), (6, 9), (2, 3), (0, 8), (7, 4), (4, 0), (8, 7)).map(Coordinate.fromTuple)
 
-    obstacles should be(expected)
+    obstacles should equal(expected)
   }
   it should "return the correct guard position" in {
     val (guardPosition, _) = parseMap(testInput)
     val expected = Coordinate(4, 6)
 
-    guardPosition should be(expected)
+    guardPosition should equal(expected)
   }
 
   behavior of "findLoopingObstructions"
 
   it should "not yield any existing obstructions" in {
     val (start, patrolMap) = parseMap(testInput)
+    val (_, obstructions) = patrolMap
 
     val actual = findLoopingObstructions(start, patrolMap)
 
-    actual.intersect(patrolMap._2) should be(empty)
+    actual should not contain obstructions
+  }
+
+  it should "yield the position next to the starting location" in {
+    val (start, patrolMap) = parseMap(testInput)
+
+    val actual = findLoopingObstructions(start, patrolMap)
+
+    actual should contain(start + Direction.West.unitVector)
   }
 
   it should "yield all options" in {
@@ -69,6 +83,6 @@ class Day06PatrolRoutesSpec extends AocSpecBase {
 
     val actual = findLoopingObstructions(start, patrolMap)
 
-    actual should be(expected)
+    actual should equal(expected)
   }
 }

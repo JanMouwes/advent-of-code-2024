@@ -7,9 +7,13 @@ trait PatrolPath {
 
   def contains(cell: Coordinate): Boolean
 
+  def containsStep(step: WalkedStep): Boolean
+
   def overlaps(other: PatrolPath): Boolean
 
   def extend(to: WalkedStep): PatrolPath
+
+  def loops: Boolean
 }
 
 
@@ -18,6 +22,8 @@ class StepPatrolPath(val steps: Iterable[WalkedStep]) extends PatrolPath {
   private val cellSet = steps.map(_._1).toSet
 
   override def contains(cell: Coordinate): Boolean = cellSet.contains(cell)
+
+  override def containsStep(step: WalkedStep): Boolean = stepSet.contains(step)
 
   override def overlaps(other: PatrolPath): Boolean = {
     other match {
@@ -29,6 +35,11 @@ class StepPatrolPath(val steps: Iterable[WalkedStep]) extends PatrolPath {
   }
 
   override def extend(to: WalkedStep): StepPatrolPath = StepPatrolPath(steps.concat(Iterable.single(to)))
+
+  override def loops: Boolean = {
+    val (loc, dir) = steps.last
+    this.containsStep(loc + dir.unitVector, dir)
+  }
 }
 
 object StepPatrolPath {
@@ -40,9 +51,12 @@ class SegmentedPatrolPath(val segments: Iterable[Segment]) extends PatrolPath {
 
   override def contains(cell: Coordinate): Boolean = segments.exists(seg => seg.contains(cell))
 
+  override def containsStep(step: WalkedStep): Boolean = segments.exists(seg => seg.direction == step._2 && seg.contains(step._1))
+
   override def overlaps(other: PatrolPath): Boolean = {
     other match {
       case that: SegmentedPatrolPath => this.overlapsAnySegment(that.segments)
+      case that: StepPatrolPath => that.overlaps(this)
     }
   }
 
@@ -62,6 +76,11 @@ class SegmentedPatrolPath(val segments: Iterable[Segment]) extends PatrolPath {
 
     SegmentedPatrolPath(segments)
   }
+
+  override def loops: Boolean = {
+    val (loc, dir) = (this.segments.last.to, this.segments.last.direction)
+    this.containsStep(loc + dir.unitVector, dir)
+  }
 }
 
 object SegmentedPatrolPath {
@@ -70,6 +89,8 @@ object SegmentedPatrolPath {
   }
 
   def empty: SegmentedPatrolPath = SegmentedPatrolPath(Seq())
+
+  def start(walkedStep: WalkedStep): SegmentedPatrolPath = fromCells(Seq(walkedStep))
 }
 
 private class Segment(val from: Coordinate, val to: Coordinate, val direction: Direction) {
@@ -117,8 +138,6 @@ private class Segment(val from: Coordinate, val to: Coordinate, val direction: D
 }
 
 private object Segment {
-
-
   def fromWalkedSteps(steps: Seq[WalkedStep]): Seq[Segment] = {
     if (steps.isEmpty) return Seq()
 

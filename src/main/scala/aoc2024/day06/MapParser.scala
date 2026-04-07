@@ -6,7 +6,7 @@ type PatrolMap = (Dimensions, Obstacles)
 
 class Dimensions(val width: Int, val height: Int) {
   def isInBounds(c: Coordinate): Boolean = {
-    c.x > 0 && c.y > 0 && c.x < this.width && c.y < this.height
+    c.x >= 0 && c.y >= 0 && c.x < this.width && c.y < this.height
   }
 }
 
