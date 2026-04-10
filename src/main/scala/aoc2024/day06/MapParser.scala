@@ -8,9 +8,9 @@ class Dimensions(val width: Int, val height: Int) {
   def isInBounds(c: Coordinate): Boolean = {
     c.x >= 0 && c.y >= 0 && c.x < this.width && c.y < this.height
   }
-  
+
   private def canEqual(other: Any): Boolean = other.isInstanceOf[Dimensions]
-  
+
   override def equals(other: Any): Boolean = other match {
     case that: Dimensions =>
       that.canEqual(this) &&
@@ -18,7 +18,7 @@ class Dimensions(val width: Int, val height: Int) {
         height == that.height
     case _ => false
   }
-  
+
   override def hashCode(): Int = {
     val state = Seq(width, height)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
@@ -28,6 +28,10 @@ class Dimensions(val width: Int, val height: Int) {
 class Coordinate(val x: Int, val y: Int) {
   def +(that: Coordinate): Coordinate = {
     Coordinate(this.x + that.x, this.y + that.y)
+  }
+
+  def -(that: Coordinate): Coordinate = {
+    Coordinate(this.x - that.x, this.y - that.y)
   }
 
   def *(scalar: Int): Coordinate = {
