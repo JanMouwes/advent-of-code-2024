@@ -2,7 +2,7 @@ package aoc2024.day08
 
 import aoc2024.day06.{Coordinate, Dimensions}
 
-type AntennaSet = Set[(Char, Coordinate)]
+type AntennaSet = Set[Antenna]
 
 class AntennaMap(val antennas: AntennaSet, val dimensions: Dimensions)
 
@@ -22,7 +22,7 @@ def parseMap(input: String): Option[AntennaMap] = {
     }
   } yield {
     val symbol = lines.apply(y).apply(x)
-    (symbol, Coordinate(x, y))
+    Antenna(symbol, Coordinate(x, y))
   }
 
   Some(AntennaMap(
