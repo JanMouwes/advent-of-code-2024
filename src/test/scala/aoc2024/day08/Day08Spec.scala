@@ -11,12 +11,18 @@ class Day08Spec extends AocSpecBase {
   it should "solve the test correctly" in {
     val expected = ""
 
-    solvePart1(testInput) should equal(expected)
+    val actual = solvePart1(testInput)
+
+    actual should equal(expected)
+    actual should not equal ("")
   }
   it should "solve the real input correctly" in {
     val expected = ""
 
-    solvePart1(realInput) should equal(expected)
+    val actual = solvePart1(realInput)
+
+    actual should equal (expected)
+    actual should not equal ("")
   }
 
   behavior of "solvePart2"
