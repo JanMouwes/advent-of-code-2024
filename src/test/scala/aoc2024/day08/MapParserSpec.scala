@@ -17,7 +17,10 @@ class MapParserSpec extends AocSpecBase {
         |...
         |...""".stripMargin,
       Dimensions(3, 3),
-      Set(('x', Coordinate(0, 0)), ('o', Coordinate(2, 0)))
+      Set(
+        Antenna('x', Coordinate(0, 0)), 
+        Antenna('o', Coordinate(2, 0))
+      )
     ),
     (
       """............
@@ -34,13 +37,13 @@ class MapParserSpec extends AocSpecBase {
         |............""".stripMargin,
       Dimensions(12, 12),
       Set(
-        ('0', Coordinate(8, 1)),
-        ('0', Coordinate(5, 2)),
-        ('0', Coordinate(7, 3)),
-        ('0', Coordinate(4, 4)),
-        ('A', Coordinate(6, 5)),
-        ('A', Coordinate(8, 8)),
-        ('A', Coordinate(9, 9)),
+        Antenna('0', Coordinate(8, 1)),
+        Antenna('0', Coordinate(5, 2)),
+        Antenna('0', Coordinate(7, 3)),
+        Antenna('0', Coordinate(4, 4)),
+        Antenna('A', Coordinate(6, 5)),
+        Antenna('A', Coordinate(8, 8)),
+        Antenna('A', Coordinate(9, 9)),
       ),
     )
   )

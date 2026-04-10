@@ -8,5 +8,8 @@ def solvePart1(input: String): String = {
 }
 
 def solvePart2(input: String): String = {
-  ""
+  parseMap(input) match {
+    case Some(parsed) => findAllAntinodesOnMap(parsed.antennas, parsed.dimensions).size.toString
+    case None => throw new IllegalArgumentException()
+  }
 }
