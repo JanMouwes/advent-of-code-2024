@@ -125,14 +125,20 @@ class AntinodeFinderSpec extends AocSpecBase {
     val dimensions = Dimensions(5, 5)
     val inputs = Table(
       ("antennas", "expected"),
-      (Set(Coordinate(1, 1), Coordinate(2, 2)), Set(Coordinate(0, 0), Coordinate(3, 3))),
-      (Set(Coordinate(3, 3), Coordinate(2, 2)), Set(Coordinate(1, 1), Coordinate(4, 4))),
+      (
+        Set(Coordinate(1, 1), Coordinate(2, 2)), 
+        Set(Coordinate(0, 0), Coordinate(3, 3), Coordinate(4, 4))
+      ),
+      (
+        Set(Coordinate(3, 3), Coordinate(2, 2)), 
+        Set(Coordinate(0, 0), Coordinate(1, 1), Coordinate(4, 4))
+      ),
       (
         Set(Coordinate(1, 1), Coordinate(2, 2), Coordinate(1, 2)),
         Set(
-          Coordinate(0, 0), Coordinate(3, 3),
-          Coordinate(1, 0), Coordinate(1, 3),
-          Coordinate(0, 2), Coordinate(3, 2)
+          Coordinate(0, 0), Coordinate(3, 3), Coordinate(4, 4),
+          Coordinate(1, 0), Coordinate(1, 3), Coordinate(1, 4),
+          Coordinate(0, 2), Coordinate(3, 2), Coordinate(4, 2)
         )
       ),
     )
@@ -141,26 +147,7 @@ class AntinodeFinderSpec extends AocSpecBase {
       (input, expected) => {
         val actual = computeResonantAntinodes(input, dimensions)
 
-        actual should equal(expected)
-      }
-    }
-  }
-
-  it should "not return any nodes in the input set" in {
-    val dimensions = Dimensions(5, 5)
-    val inputs = Table(
-      ("antennas", "expected"),
-      (
-        Set(Coordinate(1, 1), Coordinate(2, 2), Coordinate(3, 3)),
-        Set(Coordinate(0, 0), Coordinate(3, 3))
-      ),
-    )
-
-    forAll(inputs) {
-      (input, expected) => {
-        val actual = computeResonantAntinodes(input, dimensions)
-
-        actual.intersect(input) should be(empty)
+        actual should equal(expected.concat(input))
       }
     }
   }

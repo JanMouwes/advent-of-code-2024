@@ -2,27 +2,16 @@ package aoc2024.day08
 
 import aoc2024.day06.{Coordinate, Dimensions}
 
-class Antenna(val frequency: Char, val coordinate: Coordinate) {
-  private def canEqual(other: Any): Boolean = other.isInstanceOf[Antenna]
+case class Antenna(frequency: Char, coordinate: Coordinate)
 
-  override def equals(other: Any): Boolean = other match {
-    case that: Antenna =>
-      that.canEqual(this) &&
-        frequency == that.frequency &&
-        coordinate == that.coordinate
-    case _ => false
-  }
-
-  override def hashCode(): Int = {
-    val state = Seq(frequency, coordinate)
-    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
-  }
-}
-
-def findAllAntinodesOnMap(antennas: Set[Antenna], dimensions: Dimensions): Set[Coordinate] = {
+def findAllAntinodesOnMap(antennas: Set[Antenna], dimensions: Dimensions, resonant: Boolean = false): Set[Coordinate] = {
   val groupedAntennas = antennas.groupBy(_.frequency).values
 
-  groupedAntennas.flatMap(antennaGroup => computeAntinodes(antennaGroup.map(_.coordinate)))
+  val computeGroupAntinodes = if resonant
+  then (group: Set[Coordinate]) => computeResonantAntinodes(group, dimensions)
+  else (group: Set[Coordinate]) => computeAntinodes(group)
+
+  groupedAntennas.flatMap(antennaGroup => computeGroupAntinodes(antennaGroup.map(_.coordinate)))
     .filter(dimensions.isInBounds)
     .toSet
 }
@@ -47,8 +36,10 @@ def computeResonantAntinodes(antennaLocations: Set[Coordinate], dimensions: Dime
     if left != right
   } yield (left, right)
 
-  pairs.map(p => {
-    val diff = p._1 - p._2
-    p._1 + diff
-  }).removedAll(antennaLocations)
+  pairs.flatMap(p => {
+    val diff = p._2 - p._1
+    LazyList.from(1)
+      .map(i => p._1 + (diff * i))
+      .takeWhile(dimensions.isInBounds)
+  })
 }

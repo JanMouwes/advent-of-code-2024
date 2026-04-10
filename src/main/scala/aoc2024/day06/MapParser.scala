@@ -4,24 +4,9 @@ type Obstacles = Set[Coordinate]
 type GuardPosition = Coordinate
 type PatrolMap = (Dimensions, Obstacles)
 
-class Dimensions(val width: Int, val height: Int) {
+case class Dimensions(width: Int, height: Int) {
   def isInBounds(c: Coordinate): Boolean = {
     c.x >= 0 && c.y >= 0 && c.x < this.width && c.y < this.height
-  }
-
-  private def canEqual(other: Any): Boolean = other.isInstanceOf[Dimensions]
-
-  override def equals(other: Any): Boolean = other match {
-    case that: Dimensions =>
-      that.canEqual(this) &&
-        width == that.width &&
-        height == that.height
-    case _ => false
-  }
-
-  override def hashCode(): Int = {
-    val state = Seq(width, height)
-    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
 }
 
