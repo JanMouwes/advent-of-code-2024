@@ -14,7 +14,7 @@ class Day08Spec extends AocSpecBase {
     val actual = solvePart1(testInput)
 
     actual should equal(expected)
-    actual should not equal ("")
+    actual should not equal ""
   }
   it should "solve the real input correctly" in {
     val expected = "390"
@@ -22,7 +22,7 @@ class Day08Spec extends AocSpecBase {
     val actual = solvePart1(realInput)
 
     actual should equal (expected)
-    actual should not equal ("")
+    actual should not equal ""
   }
 
   behavior of "solvePart2"
@@ -33,7 +33,7 @@ class Day08Spec extends AocSpecBase {
     val actual = solvePart2(testInput)
 
     actual should equal(expected)
-    actual should not equal ("")
+    actual should not equal ""
   }
   it should "solve the real input correctly" in {
     val expected = "1246"
@@ -41,6 +41,6 @@ class Day08Spec extends AocSpecBase {
     val actual = solvePart2(realInput)
 
     actual should equal(expected)
-    actual should not equal ("")
+    actual should not equal ""
   }
 }
