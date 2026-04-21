@@ -17,7 +17,7 @@ class Day09Spec extends AocSpecBase {
     actual should not equal ""
   }
   it should "solve the real input correctly" in {
-    val expected = ""
+    val expected = "6353658451014"
 
     val actual = solvePart1(realInput)
 

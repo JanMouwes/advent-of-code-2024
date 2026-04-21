@@ -1,5 +1,7 @@
 package aoc2024.day09
 
+import aoc2024.day09.DiskBlock.Gap
+
 import scala.annotation.tailrec
 
 case class DiskMap(blocks: Seq[DiskBlock]) {
@@ -15,10 +17,24 @@ case class DiskMap(blocks: Seq[DiskBlock]) {
     this.files.map(_.size).sum
   }
 
-  def checksum: Int = {
-    val singleBlocks = files.flatMap(file => Seq.fill(file.size)(file.id))
+  def checksum: Long = {
+    val ids = words.collect { case DiskBlock.File(id, size) => id }
+    ids.zipWithIndex.map { case (id: Int, index: Int) => id.toLong * index }.sum
+  }
 
-    singleBlocks.zipWithIndex.map { case (id: Int, index: Int) => id * index }.sum
+  def render: String = {
+    val chars = words.map {
+      case DiskBlock.File(id, size) => id.toString
+      case DiskBlock.Gap(size) => '.'
+    }
+    chars.mkString
+  }
+
+  private def words: Seq[DiskBlock] = {
+    blocks.flatMap {
+      case DiskBlock.File(id, size) => Seq.fill(size)(DiskBlock.File(id, 1))
+      case DiskBlock.Gap(size) => Seq.fill(size)(DiskBlock.Gap(1))
+    }
   }
 }
 
