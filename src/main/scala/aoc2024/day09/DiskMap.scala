@@ -14,23 +14,32 @@ case class DiskMap(blocks: Seq[DiskBlock]) {
   def totalFileSize: Int = {
     this.files.map(_.size).sum
   }
+
+  def checksum: Int = {
+    val singleBlocks = files.flatMap(file => Seq.fill(file.size)(file.id))
+
+    singleBlocks.zipWithIndex.map { case (id: Int, index: Int) => id * index }.sum
+  }
+}
+
+object DiskMap {
+  def parse(diskMap: String): DiskMap = {
+    val ints = diskMap.toSeq.map(_.asDigit)
+
+    val blocks = ints.zipWithIndex.map((int, index) => {
+      val isEven = index % 2 == 0
+      val id = index / 2
+      if isEven then DiskBlock.File(id, int) else DiskBlock.Gap(int)
+    })
+
+    DiskMap(blocks)
+  }
 }
 
 enum DiskBlock(val size: Int):
   case File(id: Int, override val size: Int) extends DiskBlock(size)
   case Gap(override val size: Int) extends DiskBlock(size)
 
-def parseDiskMap(diskMap: String): DiskMap = {
-  val ints = diskMap.toSeq.map(_.asDigit)
-
-  val blocks = ints.zipWithIndex.map((int, index) => {
-    val isEven = index % 2 == 0
-    val id = index / 2
-    if isEven then DiskBlock.File(id, int) else DiskBlock.Gap(int)
-  })
-
-  DiskMap(blocks)
-}
 
 @tailrec
 def compressDiskMap(diskMap: DiskMap): DiskMap = {
@@ -66,7 +75,7 @@ def compressDiskMap(diskMap: DiskMap): DiskMap = {
     }
 
     val tripEndGaps = (leftOfFirstGap ++ constructedTail).reverse.dropWhile(_.isInstanceOf[DiskBlock.Gap]).reverse
-    
+
     DiskMap(tripEndGaps)
   }
 

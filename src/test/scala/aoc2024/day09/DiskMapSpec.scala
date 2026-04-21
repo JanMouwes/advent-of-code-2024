@@ -6,13 +6,13 @@ import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
 
 class DiskMapSpec extends AocSpecBase {
-  behavior of "parseDiskMap"
+  behavior of "DiskMap.parse"
 
   it should "parse an empty input" in {
     val input = ""
     val expected = DiskMap(Seq.empty)
 
-    val actual = parseDiskMap(input)
+    val actual = DiskMap.parse(input)
 
     actual should equal(expected)
   }
@@ -21,7 +21,7 @@ class DiskMapSpec extends AocSpecBase {
     val input = "123"
     val expected = DiskMap(Seq(File(0, 1), Gap(2), File(1, 3)))
 
-    val actual = parseDiskMap(input)
+    val actual = DiskMap.parse(input)
 
     actual should equal(expected)
   }
@@ -56,11 +56,22 @@ class DiskMapSpec extends AocSpecBase {
 
     forAll(cases) {
       (input, expected) => {
-       
+
         val actual = compressDiskMap(input)
 
         actual should equal(expected)
       }
     }
+  }
+
+  behavior of "checksum"
+
+  it should "produce the expected output" in {
+    val input = DiskMap(Seq(File(id = 0, size = 1), File(id = 2, size = 1), File(id = 1, size = 3), File(id = 2, size = 2)))
+    val expected = 0 + 2 + (2 + 3 + 4) + (10 + 12)
+    
+    val actual = input.checksum
+    
+    actual should equal(expected)
   }
 }
