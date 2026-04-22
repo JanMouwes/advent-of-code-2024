@@ -5,14 +5,13 @@ import aoc2024.day09.DiskBlock.{File, Gap}
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
 
-class compressDiskMapSpec extends AocSpecBase {
-
-  behavior of "compressDiskMap"
+class defragmentDiskMapSpec extends AocSpecBase {
+  behavior of "defragmentDiskMap"
 
   it should "retain total file size" in {
     val input = DiskMap(Seq(File(0, 1, 0), Gap(2, 1), File(1, 3, 3)))
 
-    val actual = compressDiskMap(input)
+    val actual = defragmentDiskMap(input)
 
     actual.totalFileSize should equal(input.totalFileSize)
   }
@@ -22,7 +21,7 @@ class compressDiskMapSpec extends AocSpecBase {
       ("input", "expected"),
       (
         DiskMap(Seq(File(0, 1, 0), Gap(2, 1), File(1, 3, 3))),
-        DiskMap(Seq(File(0, 1, 0), File(1, 3, 1)))
+        DiskMap(Seq(File(0, 1, 0), Gap(2, 1), File(1, 3, 3)))
       ),
       (
         DiskMap(Seq(File(0, 1, 0), Gap(4, 1), File(1, 3, 5))),
@@ -30,7 +29,7 @@ class compressDiskMapSpec extends AocSpecBase {
       ),
       (
         DiskMap(Seq(File(0, 1, 0), Gap(1, 1), File(1, 3, 2), Gap(2, 5), File(2, 3, 7))),
-        DiskMap(Seq(File(0, 1, 0), File(2, 1, 1), File(1, 3, 2), File(2, 2, 5)))
+        DiskMap(Seq(File(0, 1, 0), Gap(1, 1), File(1, 3, 2), Gap(2, 5), File(2, 3, 7)))
       )
 
     )
@@ -38,7 +37,7 @@ class compressDiskMapSpec extends AocSpecBase {
     forAll(cases) {
       (input, expected) => {
 
-        val actual = compressDiskMap(input)
+        val actual = defragmentDiskMap(input)
 
         actual should equal(expected)
       }

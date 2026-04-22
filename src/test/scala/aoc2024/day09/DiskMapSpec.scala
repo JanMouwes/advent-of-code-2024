@@ -17,7 +17,7 @@ class DiskMapSpec extends AocSpecBase {
 
   it should "parse the expected input" in {
     val input = "123"
-    val expected = DiskMap(Seq(File(0, 1), Gap(2), File(1, 3)))
+    val expected = DiskMap(Seq(File(0, 1, 0), Gap(2, 1), File(1, 3, 3)))
 
     val actual = DiskMap.parse(input)
 
@@ -29,10 +29,10 @@ class DiskMapSpec extends AocSpecBase {
 
   it should "produce the expected output" in {
     val input = DiskMap(Seq(
-      File(id = 0, size = 1),
-      File(id = 2, size = 1),
-      File(id = 1, size = 3),
-      File(id = 2, size = 2)
+      File(id = 0, size = 1, startIndex = 0),
+      File(id = 2, size = 1, startIndex = 1),
+      File(id = 1, size = 3, startIndex = 2),
+      File(id = 2, size = 2, startIndex = 5)
     ))
     val expected = 0 + 2 + (2 + 3 + 4) + (10 + 12)
 

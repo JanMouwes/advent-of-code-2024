@@ -15,22 +15,24 @@ def compressDiskMap(diskMap: DiskMap): DiskMap = {
 
     val constructedTail = if remaining < 0
     then {
-      val fileLeftPart = DiskBlock.File(file.id, gap.size)
-      val fileRightPart = DiskBlock.File(file.id, -remaining)
+      val fileLeftPart = file.copy(size = gap.size, startIndex = gap.startIndex)
+      val fileRightPart = file.copy(size = -remaining)
 
       val withoutGapAndFile = gapAndRest.tail.init
 
-      val constructedTail =
-        if withoutGapAndFile.nonEmpty
-        then fileLeftPart +: withoutGapAndFile :+ fileRightPart
-        else Seq(file)
+      val constructedTail = {
+        val areGapAndFileAdjacent = withoutGapAndFile.isEmpty
+        if areGapAndFileAdjacent
+        then Seq(file.copy(startIndex = gap.startIndex))
+        else fileLeftPart +: withoutGapAndFile :+ fileRightPart
+      }
 
       constructedTail
     }
     else {
-      val newGap = DiskBlock.Gap(remaining)
+      val moved = moveFileToGap(file, gap)
 
-      val constructedTail = file +: newGap +: gapAndRest.tail.init
+      val constructedTail = moved ++ gapAndRest.tail.init
 
       constructedTail
     }
