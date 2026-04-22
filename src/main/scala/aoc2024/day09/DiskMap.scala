@@ -16,11 +16,11 @@ case class DiskMap(blocks: Seq[DiskBlock]) {
   }
 
   def checksum: Long = {
-    val ids = words.collect { case file: DiskBlock.File => file.id }
-    ids.zipWithIndex.map { case (id: Int, index: Int) => id.toLong * index }.sum
+    val ids = words.collect { case file: DiskBlock.File => file }
+    ids.map(file => file.id.toLong * file.startIndex).sum
   }
 
-  def render: String = {
+  override def toString: String = {
     val chars = words.map {
       case file: DiskBlock.File => file.id.toString
       case gap: DiskBlock.Gap => '.'

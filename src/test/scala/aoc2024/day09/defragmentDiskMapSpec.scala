@@ -25,7 +25,7 @@ class defragmentDiskMapSpec extends AocSpecBase {
       ),
       (
         DiskMap(Seq(File(0, 1, 0), Gap(4, 1), File(1, 3, 5))),
-        DiskMap(Seq(File(0, 1, 0), File(1, 3, 1)))
+        DiskMap(Seq(File(0, 1, 0), File(1, 3, 1), Gap(1, 4), Gap(3, 5)))
       ),
       (
         DiskMap(Seq(File(0, 1, 0), Gap(1, 1), File(1, 3, 2), Gap(2, 5), File(2, 3, 7))),
@@ -36,7 +36,6 @@ class defragmentDiskMapSpec extends AocSpecBase {
 
     forAll(cases) {
       (input, expected) => {
-
         val actual = defragmentDiskMap(input)
 
         actual should equal(expected)
