@@ -2,8 +2,6 @@ package aoc2024.day09
 
 import aoc2024.day09.DiskBlock.Gap
 
-import scala.annotation.tailrec
-
 case class DiskMap(blocks: Seq[DiskBlock]) {
   def files: Seq[DiskBlock.File] = {
     blocks.collect { case f: DiskBlock.File => f }
@@ -56,48 +54,3 @@ enum DiskBlock(val size: Int):
   case File(id: Int, override val size: Int) extends DiskBlock(size)
   case Gap(override val size: Int) extends DiskBlock(size)
 
-
-@tailrec
-def compressDiskMap(diskMap: DiskMap): DiskMap = {
-  if (diskMap.gaps.isEmpty) return diskMap
-
-  val file = diskMap.files.last
-  val gap = diskMap.gaps.head
-
-  def doCompressionStep(diskMap: DiskMap): DiskMap = {
-    val remaining = gap.size - file.size
-    val (leftOfFirstGap, firstGapAndRest) = diskMap.blocks.span(_ != gap)
-
-    val constructedTail = if remaining < 0
-    then {
-      val fileLeftPart = DiskBlock.File(file.id, gap.size)
-      val fileRightPart = DiskBlock.File(file.id, -remaining)
-
-      val withoutGapAndFile = firstGapAndRest.tail.init
-
-      val constructedTail =
-        if withoutGapAndFile.nonEmpty
-        then fileLeftPart +: withoutGapAndFile :+ fileRightPart
-        else Seq(file)
-
-      constructedTail
-    }
-    else {
-      val newGap = DiskBlock.Gap(remaining)
-
-      val constructedTail = file +: newGap +: firstGapAndRest.tail.init
-
-      constructedTail
-    }
-
-    val tripEndGaps = (leftOfFirstGap ++ constructedTail).reverse.dropWhile(_.isInstanceOf[DiskBlock.Gap]).reverse
-
-    DiskMap(tripEndGaps)
-  }
-
-  val result = doCompressionStep(diskMap)
-
-  if result == diskMap
-  then diskMap
-  else compressDiskMap(result)
-}
