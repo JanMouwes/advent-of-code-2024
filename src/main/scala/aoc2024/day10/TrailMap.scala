@@ -19,6 +19,10 @@ case class TrailMap(private val topographicMap: TopographicMap) {
 
     summits.map(_.size).sum
   }
+  
+  def rating(): Int = {
+    trails.size
+  }
  
   def trails: Set[Trail] = {
     trailheads.flatMap(trailsFrom)

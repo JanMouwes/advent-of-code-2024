@@ -28,7 +28,7 @@ class Day10Spec extends AocSpecBase {
   behavior of "solvePart2"
 
   it should "solve the test correctly" in {
-    val expected = "2858"
+    val expected = "81"
 
     val actual = solvePart2(testInput)
 
@@ -36,7 +36,7 @@ class Day10Spec extends AocSpecBase {
     actual should not equal ""
   }
   it should "solve the real input correctly" in {
-    val expected = "6382582136592"
+    val expected = "928"
 
     val actual = solvePart2(realInput)
 

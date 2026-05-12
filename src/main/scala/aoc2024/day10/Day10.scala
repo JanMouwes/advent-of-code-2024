@@ -7,10 +7,7 @@ def solvePart1(input: String): String = {
 }
 
 def solvePart2(input: String): String = {
-//  val (start, patrolMap) = parseMap(input)
-//  val obstructions = findLoopingObstructions(start, patrolMap)
-//
-//  obstructions.size.toString
-  
-  input
+  val trailMap = TrailMap(TopographicMap.parse(input))
+
+  trailMap.rating().toString
 }
