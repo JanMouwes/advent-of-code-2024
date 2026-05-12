@@ -58,43 +58,43 @@ class TopographicMapSpec extends TableSpecBase {
     })
   }
 
-  behavior of "TopographicMap.trailheads"
+  private val exampleMap = TopographicMap.parse(
+    """0123
+      |1234
+      |8765
+      |9876""".stripMargin)
 
-  it should "return all zeroes on the map" in {
-    val inputs = Table(
-      ("map", "zeroes"),
-      (
-        """0123
-          |1234
-          |8765
-          |9876""".stripMargin, Set(Coordinate(0, 0))),
-      (
-        """89010123
-          |78121874
-          |87430965
-          |96549874
-          |45678903
-          |32019012
-          |01329801
-          |10456732""".stripMargin, 
-        Set(
-          Coordinate(2, 0), Coordinate(4, 0),
-          Coordinate(4, 2), Coordinate(6, 4),
-          Coordinate(2, 5), Coordinate(5, 5),
-          Coordinate(0, 6), Coordinate(6, 6),
-          Coordinate(1, 7)
-        )
-      ),
-    )
+  private val largerExampleMap = TopographicMap.parse(
+    """89010123
+      |78121874
+      |87430965
+      |96549874
+      |45678903
+      |32019012
+      |01329801
+      |10456732""".stripMargin)
+  
+  behavior of "TopographicMap.neighboursOf"
 
-    forAll(inputs) {
-      (input, expected) => {
-        val map = TopographicMap.parse(input)
-        val actual = map.trailheads
+  it should "return a set of in-bounds coordinates" in {
+    val map = exampleMap
 
-        actual should have size expected.size
-        actual should equal(expected)
-      }
-    }
+    val actual = exampleMap.neighboursOf(Coordinate(1, 1))
+
+    actual should have size 4
+    actual.foreach(neighbour => {
+      exampleMap.dimensions.isInBounds(neighbour) shouldBe true
+    })
+  }
+
+  it should "return a set of mutual neighbours" in {
+    val map = exampleMap
+
+    val centre = Coordinate(1, 1)
+    val actual = exampleMap.neighboursOf(centre)
+
+    actual.foreach(neighbour => {
+      exampleMap.neighboursOf(neighbour) should contain(centre)
+    })
   }
 }

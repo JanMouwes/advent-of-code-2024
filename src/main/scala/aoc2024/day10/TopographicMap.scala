@@ -7,12 +7,16 @@ case class TopographicMap(private val matrix: Array[Array[Int]], dimensions: Dim
     matrix(y)(x)
   }
 
-  val trailheads: Set[Coordinate] = {
-    for x <- 0 until dimensions.width
-        y <- 0 until dimensions.height
-        if this (x, y) == 0
-    yield Coordinate(x, y)
-  }.toSet
+  def neighboursOf(coordinate: Coordinate): Set[Coordinate] = {
+    val cardinalDirections = Set(
+      Coordinate(-1, 0), 
+      Coordinate(0, -1), 
+      Coordinate(0, 1),
+      Coordinate(1, 0), 
+    )
+
+    cardinalDirections.map(_ + coordinate).filter(dimensions.isInBounds)
+  }
 }
 
 object TopographicMap {
