@@ -7,6 +7,8 @@ lazy val root = (project in file("."))
     name := "advent of code 2024"
   )
 
+scalacOptions += "-deprecation"
+
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.20"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.20" % "test"
 libraryDependencies += "org.scalatestplus" %% "scalacheck-1-19" % "3.2.20.0" % "test"
