@@ -1,6 +1,6 @@
 package aoc2024.day10
 
-import aoc2024.day06.Coordinate
+import aoc2024.datastructures.Coordinate
 
 case class TrailMap(private val topographicMap: TopographicMap) {
   val trailheads: Set[Coordinate] = {

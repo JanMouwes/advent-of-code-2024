@@ -1,6 +1,7 @@
 package aoc2024.day06
 
 import aoc2024.base.AocSpecBase
+import aoc2024.datastructures.Coordinate
 import org.scalatest.prop.TableDrivenPropertyChecks.forEvery
 import org.scalatest.prop.Tables.Table
 

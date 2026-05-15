@@ -1,5 +1,7 @@
 package aoc2024.day06
 
+import aoc2024.datastructures.Coordinate
+
 def findLoopingObstructions(start: Coordinate, patrolMap: PatrolMap): Set[Coordinate] = {
   val (dimensions, obstacles) = patrolMap
 

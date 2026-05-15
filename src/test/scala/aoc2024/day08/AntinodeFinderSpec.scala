@@ -1,7 +1,7 @@
 package aoc2024.day08
 
 import aoc2024.base.AocSpecBase
-import aoc2024.day06.{Coordinate, Dimensions}
+import aoc2024.datastructures.{Coordinate, Dimensions}
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
 
@@ -101,7 +101,7 @@ class AntinodeFinderSpec extends AocSpecBase {
       }
     }
   }
-  
+
   behavior of "computeResonantAntinodes"
 
   it should "return an empty set for inputs smaller than two elements" in {
@@ -126,11 +126,11 @@ class AntinodeFinderSpec extends AocSpecBase {
     val inputs = Table(
       ("antennas", "expected"),
       (
-        Set(Coordinate(1, 1), Coordinate(2, 2)), 
+        Set(Coordinate(1, 1), Coordinate(2, 2)),
         Set(Coordinate(0, 0), Coordinate(3, 3), Coordinate(4, 4))
       ),
       (
-        Set(Coordinate(3, 3), Coordinate(2, 2)), 
+        Set(Coordinate(3, 3), Coordinate(2, 2)),
         Set(Coordinate(0, 0), Coordinate(1, 1), Coordinate(4, 4))
       ),
       (

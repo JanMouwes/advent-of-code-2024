@@ -1,4 +1,4 @@
-package aoc2024.day06
+package aoc2024.datastructures
 
 case class Coordinate(x: Int, y: Int) {
   def +(that: Coordinate): Coordinate = {

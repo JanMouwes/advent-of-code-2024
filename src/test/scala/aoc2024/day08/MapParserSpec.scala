@@ -1,7 +1,7 @@
 package aoc2024.day08
 
 import aoc2024.base.AocSpecBase
-import aoc2024.day06.{Coordinate, Dimensions}
+import aoc2024.datastructures.{Coordinate, Dimensions}
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
 
@@ -18,7 +18,7 @@ class MapParserSpec extends AocSpecBase {
         |...""".stripMargin,
       Dimensions(3, 3),
       Set(
-        Antenna('x', Coordinate(0, 0)), 
+        Antenna('x', Coordinate(0, 0)),
         Antenna('o', Coordinate(2, 0))
       )
     ),
@@ -53,7 +53,7 @@ class MapParserSpec extends AocSpecBase {
       (input, expectedDimensions, expectedAntennas) => {
         val maybeActual = parseMap(input)
 
-        maybeActual should be (defined)
+        maybeActual should be(defined)
         val actual = maybeActual.get
         actual.dimensions should equal(expectedDimensions)
         actual.antennas should equal(expectedAntennas)

@@ -1,7 +1,7 @@
 package aoc2024.day10
 
 import aoc2024.base.TableSpecBase
-import aoc2024.day06.{Coordinate, Dimensions}
+import aoc2024.datastructures.{Coordinate, Dimensions}
 
 class TopographicMapSpec extends TableSpecBase {
   private val inputs = Table(
@@ -73,7 +73,7 @@ class TopographicMapSpec extends TableSpecBase {
       |32019012
       |01329801
       |10456732""".stripMargin)
-  
+
   behavior of "TopographicMap.neighboursOf"
 
   it should "return a set of in-bounds coordinates" in {

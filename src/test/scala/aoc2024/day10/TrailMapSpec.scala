@@ -1,7 +1,7 @@
 package aoc2024.day10
 
 import aoc2024.base.TableSpecBase
-import aoc2024.day06.Coordinate
+import aoc2024.datastructures.Coordinate
 
 class TrailMapSpec extends TableSpecBase {
   private val exampleMap = TopographicMap.parse(

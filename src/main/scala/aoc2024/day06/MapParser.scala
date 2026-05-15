@@ -1,14 +1,12 @@
 package aoc2024.day06
 
+import aoc2024.datastructures.{Coordinate, Dimensions}
+
 type Obstacles = Set[Coordinate]
 type GuardPosition = Coordinate
 type PatrolMap = (Dimensions, Obstacles)
 
-case class Dimensions(width: Int, height: Int) {
-  def isInBounds(c: Coordinate): Boolean = {
-    c.x >= 0 && c.y >= 0 && c.x < this.width && c.y < this.height
-  }
-}
+
 
 
 def parseMap(input: String): (GuardPosition, PatrolMap) = {

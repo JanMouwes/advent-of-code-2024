@@ -1,6 +1,7 @@
 package aoc2024.day10
 
-import aoc2024.day06.{Coordinate, Dimensions}
+import aoc2024.datastructures.Coordinate
+import aoc2024.datastructures.Dimensions
 
 case class TopographicMap(private val matrix: Array[Array[Int]], dimensions: Dimensions) {
   def apply(x: Int, y: Int): Int = {

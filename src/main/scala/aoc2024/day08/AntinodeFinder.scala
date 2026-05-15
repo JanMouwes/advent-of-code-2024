@@ -1,6 +1,6 @@
 package aoc2024.day08
 
-import aoc2024.day06.{Coordinate, Dimensions}
+import aoc2024.datastructures.{Coordinate, Dimensions}
 
 case class Antenna(frequency: Char, coordinate: Coordinate)
 
